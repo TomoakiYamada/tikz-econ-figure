@@ -1,0 +1,125 @@
+% ============================================================
+%  tikz_fig_adas_sr.tex
+%  短期の総需要・総供給（Short-Run AD-AS）分析
+%
+%  【単体コンパイル】
+%    uplatex  tikz_fig_adas_sr.tex && dvipdfmx tikz_fig_adas_sr.dvi
+%
+%  【Beamer への組み込み】
+%    my_preamble.tex に以下を追加してから \input{tikz/tikz_fig_adas_sr}
+%      \definecolor{srasgreen}{RGB}{30, 140, 60}
+%
+%  曲線の仕様:
+%    AD  : P = 10/Y + 1.5   （右下がり双曲線）
+%    SRAS: P = 0.5Y + 1     （右上がり直線; 価格粘着性）
+%    均衡: (Y₀, P₀) = (5, 3.5)
+%
+%  ※ 長期版（tikz_fig_adas_lr.tex）と座標系・スタイルを統一済み
+%    → 同じスライドセットに並べて使用可能
+%
+%  コメントアウトで以下も用意:
+%    (A) AD シフト（拡張的需要政策 → P↑, Y↑）
+%    (B) SRAS 上方シフト（負のサプライショック → スタグフレーション）
+%    (C) SRAS 下方シフト（正のサプライショック → P↓, Y↑）
+% ============================================================
+\documentclass[tikz, dvipdfmx]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\definecolor{gdpblue}  {RGB}{30,  90,  180}
+\definecolor{srasgreen}{RGB}{30, 140,  60}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Stealth,
+  thick,
+]
+
+% ── 軸 ──────────────────────────────────────────────────────
+\draw[->] (0,0) -- (9.8,0)
+  node[right, font=\small] {$Y$ (Output)};
+\draw[->] (0,0) -- (0,7.8)
+  node[above, font=\small] {$P$ (Price level)};
+
+% ── 短期総供給曲線 SRAS（右上がり） ──────────────────────
+%    P = 0.5Y + 1
+%    右上がりの根拠: 価格・賃金の粘着性（短期では名目賃金固定）
+%    Y=0.2→P=1.1,  Y=5→P=3.5,  Y=8.5→P=5.25
+\draw[srasgreen, very thick]
+  plot[domain=0.2:8.5, samples=2] (\x, {0.5*\x + 1})
+  node[right, font=\small, srasgreen] {SRAS};
+
+% ── 総需要曲線 AD（右下がり） ─────────────────────────────
+%    P = 10/Y + 1.5
+%    右下がりの根拠: 富の効果, 利子率効果, 為替レート効果
+%    Y≈1.72→P≈7.3,  Y=5→P=3.5,  Y=9.3→P≈2.6
+\draw[gdpblue, very thick]
+  plot[domain=1.72:9.3, samples=120, smooth] (\x, {10/\x + 1.5})
+  node[right, font=\small, gdpblue] {AD};
+
+% ── 短期均衡点 (Y₀, P₀) = (5, 3.5) ────────────────────────
+%    AD ∩ SRAS:  10/Y + 1.5 = 0.5Y + 1
+%                → Y² - Y - 20 = 0 → Y = 5 ✓
+\fill[black] (5, 3.5) circle[radius=2.5pt];
+
+% ── 均衡値への点線 ───────────────────────────────────────
+\draw[dashed, gray!70, thin]
+  (0, 3.5) node[left, font=\small, black] {$P_0$} -- (5, 3.5);
+\draw[dashed, gray!70, thin]
+  (5, 0)   node[below, font=\small, black] {$Y_0$} -- (5, 3.5);
+
+
+% ════════════════════════════════════════════════════════════
+%  以下はコメントアウト: 必要に応じて有効化
+% ════════════════════════════════════════════════════════════
+
+%% ── (A) AD 右シフト（拡張的財政・金融政策） ─────────────
+%%    AD' : P = 14/Y + 1.5
+%%    新均衡: Y₁ ≈ 6.52, P₁ ≈ 4.26  ← 短期では Y も上昇（長期と違う!）
+%%
+%% \draw[gdpblue!60, very thick, dashed]
+%%   plot[domain=2.2:9.3, samples=120, smooth] (\x, {14/\x + 1.5})
+%%   node[right, font=\small, gdpblue!70] {AD$'$};
+%% % 新均衡点
+%% \fill[black] (6.52, 4.26) circle[radius=2pt];
+%% \draw[dashed, gray!50, thin] (0, 4.26) -- (6.52, 4.26)
+%%   node[above left, font=\scriptsize] {};
+%% \draw[dashed, gray!50, thin] (6.52, 0) node[below, font=\scriptsize] {$Y_1$}
+%%   -- (6.52, 4.26);
+%% \node[left, font=\scriptsize] at (0, 4.26) {$P_1$};
+%% % シフト矢印
+%% \draw[->, thick, gdpblue!60]
+%%   (3.0, {10/3.0+1.5+0.2}) -- (3.0, {14/3.0+1.5-0.2});
+
+%% ── (B) SRAS 上方シフト（負のサプライショック: 原油高など）
+%%    スタグフレーション: P↑ かつ Y↓
+%%    SRAS': P = 0.5Y + 2.5
+%%    新均衡: Y₁ ≈ 3.58, P₁ ≈ 4.29
+%%
+%% \draw[srasgreen!60, very thick, dashed]
+%%   plot[domain=0.2:8.5, samples=2] (\x, {0.5*\x + 2.5})
+%%   node[right, font=\small, srasgreen!70] {SRAS$'$};
+%% \fill[black] (3.58, 4.29) circle[radius=2pt];
+%% \draw[dashed, gray!50, thin] (0, 4.29) node[left, font=\scriptsize] {$P_1$}
+%%   -- (3.58, 4.29);
+%% \draw[dashed, gray!50, thin] (3.58, 0) node[below, font=\scriptsize] {$Y_1$}
+%%   -- (3.58, 4.29);
+%% % シフト矢印
+%% \draw[->, thick, srasgreen!60]
+%%   (6.5, {0.5*6.5+1+0.15}) -- (6.5, {0.5*6.5+2.5-0.15});
+
+%% ── (C) SRAS 下方シフト（正のサプライショック: 技術進歩など）
+%%    P↓ かつ Y↑
+%%    SRAS'': P = 0.5Y - 0.5
+%%    新均衡: Y₁ ≈ 6.90, P₁ ≈ 2.95
+%%
+%% \draw[srasgreen!60, very thick, dashed]
+%%   plot[domain=1.0:9.0, samples=2] (\x, {0.5*\x - 0.5})
+%%   node[right, font=\small, srasgreen!70] {SRAS$''$};
+%% \fill[black] (6.90, 2.95) circle[radius=2pt];
+%% \draw[dashed, gray!50, thin] (0, 2.95) node[left, font=\scriptsize] {$P_1$}
+%%   -- (6.90, 2.95);
+%% \draw[dashed, gray!50, thin] (6.90, 0) node[below, font=\scriptsize] {$Y_1$}
+%%   -- (6.90, 2.95);
+
+\end{tikzpicture}
+\end{document}

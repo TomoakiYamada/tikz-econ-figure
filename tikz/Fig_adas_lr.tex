@@ -1,0 +1,97 @@
+% ============================================================
+%  tikz_fig_adas_lr.tex
+%  長期の総需要・総供給（AD-AS）分析
+%
+%  【単体コンパイル】
+%    uplatex  tikz_fig_adas_lr.tex && dvipdfmx tikz_fig_adas_lr.dvi
+%
+%  【Beamer への組み込み（my_preamble.tex に standalone 追加済みの場合）】
+%    \input{tikz/tikz_fig_adas_lr}
+%
+%  曲線の仕様:
+%    AD  : P = 10/Y + 1.5   （右下がり双曲線）
+%    LRAS: Y = Y*  = 5.0    （垂直線・潜在 GDP）
+%    均衡: (Y*, P*) = (5, 3.5)
+%
+%  コメントアウトで以下も用意:
+%    SRAS : 短期総供給曲線（右上がり）
+%    AD'  : 総需要曲線のシフト後（ADシフトの例）
+% ============================================================
+\documentclass[tikz, dvipdfmx]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\definecolor{gdpblue} {RGB}{30,  90,  180}
+\definecolor{trendred}{RGB}{190, 40,  40}
+\definecolor{srasgreen}{RGB}{30, 140, 60}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Stealth,
+  thick,
+  % 1 unit = 1 cm; 図全体の描画域はおよそ 9.5 cm × 7.5 cm
+]
+
+% ── 軸 ──────────────────────────────────────────────────────
+\draw[->] (0,0) -- (9.8,0)
+  node[right, font=\small] {$Y$ (Output)};
+\draw[->] (0,0) -- (0,7.8)
+  node[above, font=\small] {$P$ (Price level)};
+
+% ── 長期総供給曲線 LRAS（垂直線） ────────────────────────
+%    Y = Y*（潜在 GDP）
+\draw[trendred, very thick] (5,0) -- (5,7.2)
+  node[above, font=\small, trendred] {LRAS};
+
+% ── 総需要曲線 AD（右下がり） ─────────────────────────────
+%    P = 10/Y + 1.5
+%    Y*=5 のとき P* = 10/5 + 1.5 = 3.5
+%    domain: P=7.4 → Y≈1.71,  P→1.5（漸近）→ Y→∞
+\draw[gdpblue, very thick]
+  plot[domain=1.72:9.3, samples=120, smooth] (\x, {10/\x + 1.5})
+  node[right, font=\small, gdpblue] {AD};
+
+% ── 均衡点 (Y*, P*) = (5, 3.5) ────────────────────────────
+\fill[black] (5,3.5) circle[radius=2.5pt];
+
+% ── P* への水平点線 ──────────────────────────────────────
+\draw[dashed, gray!70, thin]
+  (0,3.5) node[left, font=\small, black] {$P^*$} -- (5,3.5);
+
+% ── Y* のラベル（横軸下）────────────────────────────────
+\node[below, font=\small] at (5,0) {$Y^*$};
+
+
+% ════════════════════════════════════════════════════════════
+%  以下はコメントアウト:  必要に応じて有効化
+% ════════════════════════════════════════════════════════════
+
+%% ── (A) 短期総供給曲線 SRAS（右上がり）──────────────────
+%%    短期均衡を示したい場合に有効化
+%% \draw[srasgreen, very thick]
+%%   plot[domain=0.3:9, samples=2, smooth] (\x, {0.7*\x + 0.0})
+%%   node[right, font=\small, srasgreen] {SRAS};
+
+%% ── (B) AD シフト（例: 拡張的財政・金融政策） ────────────
+%%    AD が右上にシフト → 長期では P のみ上昇, Y は不変
+%%
+%%    AD' : P = 14/Y + 1.5   （AD を上方シフト）
+%%    新均衡: (Y*, P**) = (5, 14/5+1.5) = (5, 4.3)
+%%
+%% % AD' 曲線
+%% \draw[gdpblue!50, very thick, dashed]
+%%   plot[domain=1.72:9.3, samples=120, smooth] (\x, {14/\x + 1.5})
+%%   node[right, font=\small, gdpblue!70] {AD$'$};
+%%
+%% % 新均衡点
+%% \fill[black] (5,4.3) circle[radius=2.5pt];
+%%
+%% % P** への水平点線
+%% \draw[dashed, gray!70, thin]
+%%   (0,4.3) node[left, font=\small, black] {$P^{**}$} -- (5,4.3);
+%%
+%% % AD から AD' へのシフト矢印
+%% \draw[->, thick, gdpblue!60]
+%%   (3.5, {10/3.5+1.5}+0.15) -- (3.5, {14/3.5+1.5}-0.15);
+
+\end{tikzpicture}
+\end{document}

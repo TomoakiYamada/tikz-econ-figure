@@ -1,0 +1,16 @@
+% fig_supply_demand.tex
+\documentclass[tikz, dvipdfmx]{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+\begin{tikzpicture}[scale=0.9]
+  \draw[->] (0,0) -- (6,0) node[right] {$Q$};
+  \draw[->] (0,0) -- (0,6) node[above] {$P$};
+  \draw[blue, very thick] (0.5,5.5) -- (5.5,0.5) node[right] {$D$};
+  \draw[red,  very thick] (0.5,0.5) -- (5.5,5.5) node[right] {$S$};
+  \fill (3,3) circle (2pt);
+  \draw[dashed] (3,0) node[below]{$Q^*$} -- (3,3) -- (0,3) node[left]{$P^*$};
+\end{tikzpicture}
+\end{document}

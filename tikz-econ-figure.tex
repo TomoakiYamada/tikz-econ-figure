@@ -1,0 +1,127 @@
+% ============================================================
+%  TizZで描いた経済学の図をBeamerで表示するためのサンプルコード
+%
+%  コンパイル方法:
+%    upLaTeX
+% ============================================================
+\documentclass[
+  %aspectratio=169,       % 16:9（4:3にするなら削除）
+  dvipdfmx,               % 日本語対応
+  t,                      % コンテンツを上寄せ
+  10pt
+]{beamer}
+
+% ── 日本語フォント（\documentclass 直後・\input より前に置く） ──
+\usepackage[deluxe]{otf}           % 多ウェイト和文フォント
+\usepackage[haranoaji]{pxchfon}    % ヒラギノ ProN（macOS）
+% 他環境の場合は pxchfon のオプションを切り替える:
+%   \usepackage[yu-osx]{pxchfon}       % 游書体（macOS）
+%   \usepackage[ipaex]{pxchfon}        % IPAex（環境非依存）
+
+\input{my_preamble}
+
+
+% ============================================================
+\begin{document}
+
+% タイトルスライド（[plain] でヘッダーなし）
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+%=============================================================
+\section{TikZで描いた経済学の図}
+%=============================================================
+
+% 需要と供給の図（TikZ）
+\begin{frame}{需要と供給}
+  \begin{center}
+    \input{tikz/Fig_supply_demand}
+  \end{center}
+\end{frame}
+
+% % main_lecture.tex（Beamer）
+% \begin{frame}{経済成長と景気循環}
+%   \begin{center}
+%     \input{tikz/Fig_business_cycle}
+%   \end{center}
+% \end{frame}
+
+% main_lecture.tex（Beamer）
+% \begin{frame}{経済成長と景気循環}
+%   \begin{center}
+%     \input{tikz/Fig_bc_compact}
+%   \end{center}
+% \end{frame}
+
+% 経済成長と景気循環の関係（TikZ）
+\begin{frame}{経済成長と景気循環}
+  \begin{center}
+    \input{tikz/Fig_bc_trend}
+  \end{center}
+\end{frame}
+
+% 景気循環のイメージ（TikZ）
+\begin{frame}{景気循環}
+  \begin{center}
+    \input{tikz/Fig_bc_cycle}
+  \end{center}
+\end{frame}
+
+% 長期における総需要・総供給分析（TikZ）
+\begin{frame}{総需要・総供給分析：長期均衡}
+  \begin{center}
+    \scalebox{0.8}{\input{tikz/Fig_adas_lr}}
+  \end{center}
+\end{frame}
+
+% 総需要曲線のシフト（TikZ）
+\begin{frame}{総需要・総供給分析：長期均衡}
+  \begin{center}
+    \scalebox{0.8}{\input{tikz/Fig_adas_lr_shift}}
+  \end{center}
+\end{frame}
+
+% 短期における総需要・総供給分析（TikZ）
+\begin{frame}{総需要・総供給分析：短期均衡}
+  \begin{center}
+    \scalebox{0.8}{\input{tikz/Fig_adas_sr}}
+  \end{center}
+\end{frame}
+
+% 因果推論（TikZ）
+\begin{frame}{政策評価がなぜ難しいのか？：因果推論の根本問題}
+  \begin{center}
+    \scalebox{0.8}{\input{tikz/Fig_causal_simple}}
+  \end{center}
+\end{frame}
+
+% 景気対策の評価（TikZ）
+\begin{frame}{政策評価がなぜ難しいのか？：景気対策の評価}
+  \begin{center}
+    \scalebox{0.8}{\input{tikz/Fig_counterfactual_cycle}}
+  \end{center}
+\end{frame}
+
+% DiD（TikZ）
+\begin{frame}{Difference-in-Differences 分析のイメージ}
+  \begin{center}
+    \scalebox{0.8}{\input{tikz/Fig_did}}
+  \end{center}
+\end{frame}
+
+% ストックとフローの関係（TikZ）
+\begin{frame}{ストックとフローの関係}
+  \begin{center}
+    \scalebox{0.6}{\input{tikz/Fig_flow_stock}}
+  \end{center}
+\end{frame}
+
+% 三面等価の原則（TikZ）
+\begin{frame}{三面等価の原則}
+  \begin{center}
+    \scalebox{0.5}{\input{tikz/Fig_three_approaches}}
+  \end{center}
+\end{frame}
+
+\end{document}

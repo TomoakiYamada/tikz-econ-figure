@@ -1,0 +1,99 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{tikz}
+\usepackage{amsmath}
+
+\begin{document}
+\begin{tikzpicture}[
+    >=stealth,
+    font=\small,
+    line cap=round,
+    line join=round
+  ]
+
+  %--------------------------------------------------
+  % パラメータ設定（ここだけ変更すれば図全体が更新）
+  %--------------------------------------------------
+  \def\a{1.0}      % 自律的消費（縦軸切片）
+  \def\mpc{0.6}    % 限界消費性向 b  (0 < b < 1)
+  \def\xmax{5.6}
+  \def\ymax{5.6}
+  \def\xline{5.0}  % 消費関数・45度線の描画終端
+
+  % 均衡所得 Y* = a / (1 - b)
+  \pgfmathsetmacro{\Ystar}{\a / (1 - \mpc)}
+
+  % 消費関数の終端 C(\xline)
+  \pgfmathsetmacro{\Cend}{\a + \mpc * \xline}
+
+  % 傾き三角形の基点
+  \def\tx{3.2}
+  \pgfmathsetmacro{\txB}{\tx + 1.0}
+  \pgfmathsetmacro{\tyA}{\a + \mpc * \tx}
+  \pgfmathsetmacro{\tyB}{\a + \mpc * \txB}
+
+  %--------------------------------------------------
+  % 軸
+  %--------------------------------------------------
+  \draw[->] (0,0) -- (\xmax, 0) node[right] {$Y$};
+  \draw[->] (0,0) -- (0, \ymax) node[above] {$C$};
+  \node[below left] at (0,0) {$O$};
+
+  %--------------------------------------------------
+  % 45度線
+  %--------------------------------------------------
+  \draw[gray, thin]
+    (0,0) -- (\xline, \xline)
+    node[above right, gray] {$45^\circ$};
+
+  %--------------------------------------------------
+  % 消費関数  C = a + bY
+  %--------------------------------------------------
+  \draw[very thick, blue!70!black]
+    (0, \a) -- (\xline, \Cend)
+    node[right] {$C = a + bY$};
+
+  %--------------------------------------------------
+  % 均衡点への補助垂線
+  %--------------------------------------------------
+  \draw[dashed, gray!70]
+    (\Ystar, 0) -- (\Ystar, \Ystar);
+
+  %--------------------------------------------------
+  % 均衡点
+  %--------------------------------------------------
+  \filldraw[blue!70!black]
+    (\Ystar, \Ystar) circle (2.5pt);
+
+  %--------------------------------------------------
+  % 軸上のラベル・目盛り
+  %--------------------------------------------------
+  % 縦軸切片 a
+  \draw[thin] (3pt, \a) -- (-3pt, \a)
+    node[left] {$a$};
+
+  % 均衡所得 Y*
+  \draw[thin] (\Ystar, 3pt) -- (\Ystar, -3pt)
+    node[below] {$Y^*$};
+
+  %--------------------------------------------------
+  % MPC を示す傾き三角形
+  %--------------------------------------------------
+  % 底辺（ΔY = 1）・右辺（ΔC = b）
+  \draw[thin]
+    (\tx, \tyA) -- (\txB, \tyA) -- (\txB, \tyB);
+
+  % 直角記号（右下の頂点）
+  \draw[thin]
+    (\txB,      \tyA)
+    -- (\txB - 0.13, \tyA)
+    -- (\txB - 0.13, \tyA + 0.13)
+    -- (\txB,        \tyA + 0.13);
+
+  % ラベル
+  \node[below] at ({(\tx + \txB)/2}, \tyA)
+    {$\scriptstyle \Delta Y {=} 1$};
+  \node[right] at (\txB, {(\tyA + \tyB)/2})
+    {$\scriptstyle \Delta C {=} b$};
+
+\end{tikzpicture}
+\end{document}

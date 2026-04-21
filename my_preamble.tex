@@ -1,0 +1,191 @@
+% ============================================================
+%  my_preamble.sty
+%  upLaTeX + dvipdfmx + Beamer 用プリアンブル
+%
+%  使い方（\documentclass の直後に）:
+%    \input{my_preamble}
+%
+%  前提: \documentclass[dvipdfmx, ...]{beamer}
+% ============================================================
+
+% === 数学・記号 ==============================================
+% amsmath / amsfonts は Beamer が内部でロード済みなので不要
+% amssymb のみ Beamer が読まないため明示的にロードする
+\usepackage{amssymb}
+
+% === 図版・作図 ==============================================
+% standalone: \input で standalone クラスのファイルを取り込む際に
+%   プリアンブル（\documentclass 〜 \begin{document}）を自動的に無視し、
+%   本文（TikZ コード等）だけを展開する。
+%   → 各 TikZ ファイルを単体コンパイルしながら Beamer にも \input できる。
+\usepackage{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}               % Stealth 矢印等
+\usetikzlibrary{decorations.pathreplacing} % 波括弧（DiD図等）
+\usetikzlibrary{shapes.geometric, positioning}          % 楕円ノード等（因果推論図）
+
+% PGFPlots: 関数プロット・データ可視化
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}       % 複数パネル（上下・左右配置）
+\usepgfplotslibrary{fillbetween}      % 2曲線間の塗りつぶし
+
+% === TikZ 図共通カラー ========================================
+% standalone プリアンブルは \input 時に無視されるため、
+% 各 TikZ ファイルで使う色はここで定義する。
+\definecolor{cfcol}  {RGB}{232, 232, 232}     % 観測不可（薄灰）
+\definecolor{cfgray}  {RGB}{100, 140, 200}    % 反事実（薄い青）
+\definecolor{expgreen} {RGB}{200, 230, 200}   % 拡張局面シェード
+\definecolor{fillcol}{RGB}{180, 215, 255}     % 政策効果の差分領域
+\definecolor{gdpblue}  {RGB}{30,  90,  180}   % GDP 線・AD 曲線
+\definecolor{goldcol}  {RGB}{190, 140,  10}
+\definecolor{recred}   {RGB}{240, 200, 200}   % 後退局面シェード
+\definecolor{srasgreen}{RGB}{30,  140, 60}    % SRAS（短期総供給曲線）
+\definecolor{trendred} {RGB}{190, 40,  40}    % トレンド線・LRAS
+\definecolor{obscol} {RGB}{210, 228, 255}     % 観測可能（薄青）
+\definecolor{watercol}{RGB}{175, 210, 240}
+
+% graphicx は Beamer が内部でロードするため不要
+% subfigure は非推奨（TeX Live が警告を出す）。
+\usepackage{subfigure}
+
+% === 参考文献 ================================================
+\usepackage{natbib}
+
+% === 欧文フォント =============================================
+% newpxtext: Palatino 改良版の本文フォント（mathpazo の現代的後継）
+% newpxmath: Palatino 系数式フォント（記号セットが mathpazo より充実）
+% \usefonttheme{serif} と組み合わせて Beamer 全体をセリフ体に統一
+%
+% 代替: Times 系にする場合は以下に切り替え
+%   \usepackage{newtxtext}
+%   \usepackage{newtxmath}
+\usepackage{newpxtext}
+\usepackage{newpxmath}
+
+% === 日本語 ==================================================
+% otf / pxchfon は \documentclass 直後のメインファイルに記述する想定
+% （Beamer のクラスオプション dvipdfmx より先に読まれる必要があるため）
+%
+%   メインファイルの例:
+%     \documentclass[dvipdfmx, t, 10pt]{beamer}
+%     \usepackage[deluxe]{otf}
+%     \usepackage[hiragino-pron]{pxchfon}
+%     \input{my_preamble}
+
+% hyperref の日本語対応（dvipdfmx 環境でのしおり文字化け防止）
+\usepackage{pxjahyper}
+
+% === フォントテーマ ==========================================
+% 和文: \kanjifamilydefault を \gtdefault にしているのでゴシック体
+% 欧文: \usefonttheme{serif} で Palatino（mathpazo）
+% → 和文ゴシック + 欧文セリフ の組み合わせ（プレゼン標準）
+% 和文も明朝にしたい場合は \gtdefault を \mcdefault に変更する
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\usefonttheme{serif}
+
+% 行間（1.0 = デフォルト、1.1〜1.2 が「少し広め」の目安）
+\linespread{1.15}
+
+% upLaTeX のゴシック体には b（bold）ウェイトが未定義で、
+% \bfseries 使用時に警告が出る。b → bx へのマッピングを明示的に
+% 宣言することで警告を抑制する（JY2: 横組み、JT2: 縦組み）
+\DeclareFontShape{JY2}{hgt}{b}{n}{<->ssub*hgt/bx/n}{}
+\DeclareFontShape{JT2}{hgt}{b}{n}{<->ssub*hgt/bx/n}{}
+
+% === Beamer テーマ ===========================================
+\usetheme{default}
+\usecolortheme{default}
+
+% ナビゲーションバーを削除
+\setbeamertemplate{navigation symbols}{}
+
+% === カラー（モノクロ） =======================================
+\setbeamercolor{normal text}{fg=black, bg=white}
+\setbeamercolor{headline}{fg=black, bg=white}
+\setbeamercolor{footline}{fg=black, bg=white}
+\setbeamercolor{frametitle}{fg=black, bg=white}
+\setbeamercolor{block title}{fg=black, bg=white}
+\setbeamercolor{block body}{fg=black, bg=white}
+\setbeamercolor{itemize item}{fg=black}
+\setbeamercolor{itemize subitem}{fg=black}
+\setbeamercolor{itemize subsubitem}{fg=black}
+\setbeamercolor{enumerate item}{fg=black}
+\setbeamercolor{enumerate subitem}{fg=black}
+\setbeamercolor{enumerate subsubitem}{fg=black}
+\setbeamercolor{alerted text}{fg=black}
+
+% ブロックの枠をなくす
+\setbeamertemplate{blocks}[default]
+
+% === 余白 ====================================================
+\setbeamersize{text margin left=5mm, text margin right=5mm}
+
+% === メタデータ（各ファイルで上書き可） ======================
+\newcommand{\coursename}{TikZ：経済学でよく使う図}
+\author[山田 知明]{山田 知明}
+\title{TikZ：経済学でよく使う図}
+\institute[明治大学]{明治大学 商学部}
+\date{2026年4月7日}
+
+% === ヘッダー（奇数: 左上に講義名 / 偶数: 右上に講義者名） ==
+% leftskip/rightskip でマージンを beamercolorbox 内に閉じ込める
+\setbeamertemplate{headline}{%
+  \begin{beamercolorbox}[%
+    wd=\paperwidth, ht=4mm, dp=1.5mm,
+    leftskip=5mm, rightskip=5mm]{headline}%
+    \ifodd\insertframenumber
+      {\footnotesize\coursename}\hfill
+    \else
+      \hfill
+      {\footnotesize\insertshortauthor%
+        \ifx\insertshortinstitute\@empty\else
+          \ (\insertshortinstitute)%
+        \fi}%
+    \fi
+  \end{beamercolorbox}%
+  % 線：テキスト領域幅（左右 5mm マージン分を差し引く）
+  \hbox{\hspace{5mm}\rule{\dimexpr\paperwidth-10mm\relax}{0.1pt}}%
+}
+
+% === フッター（右下にページ番号） ============================
+% [plain] フレーム（タイトルページ等）では自動的に非表示になる
+\setbeamertemplate{footline}{%
+  \hbox{\hspace{5mm}\rule{\dimexpr\paperwidth-10mm\relax}{0.1pt}}%
+  \begin{beamercolorbox}[%
+    wd=\paperwidth, ht=2.5mm, dp=1.5mm,
+    leftskip=5mm, rightskip=5mm]{footline}%
+    %\hfill{\footnotesize\insertframenumber}%
+    \hfill{{\footnotesize\insertframenumber\,/\,\inserttotalframenumber}}
+  \end{beamercolorbox}%
+}
+
+% === フレームタイトル =========================================
+\setbeamertemplate{frametitle}{%
+  \vspace{1mm}%
+  {\large\bfseries\insertframetitle}%
+  \ifx\insertframesubtitle\@empty\else
+    \\[0.5mm]{\small\itshape\insertframesubtitle}%
+  \fi
+  \vspace{-1mm}%
+}
+
+% === 箇条書き記号 =============================================
+\setbeamertemplate{itemize item}{$\bullet$}
+\setbeamertemplate{itemize subitem}{$\circ$}
+\setbeamertemplate{itemize subsubitem}{--}
+
+% === タイトルページ ===========================================
+\setbeamertemplate{title page}{%
+  \vfill
+  \centering
+  {\LARGE\bfseries\inserttitle}\\[5mm]
+  {\normalsize\insertauthor}\\[2mm]
+  {\normalsize\insertinstitute}\\[1mm]
+  {\normalsize\insertdate}%
+  \vfill
+}
+
+% === 参考文献スタイル =========================================
+\bibliographystyle{ecta}
