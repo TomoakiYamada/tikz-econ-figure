@@ -170,7 +170,7 @@ dvipdfmx tikz/Fig_supply_demand.dvi
 
 ## ライセンス
 
-[MIT License](LICENSE) — 自由にご利用・改変・再配布いただけます。出典の明示は歓迎しますが、必須ではありません。
+[MIT License](LICENSE) — 自由にご利用・改変・再配布いただけます。
 
 ---
 
